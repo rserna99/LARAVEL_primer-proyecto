@@ -67,7 +67,12 @@ class ResumeController extends Controller
             ]);
         }
 
-        return redirect()->route('resumes.index');
+        return redirect()
+                ->route('resumes.index')
+                ->with('alert', [
+                    'type' => 'success',
+                    'message' => "Resume $resume->title created succesfully"
+                ]);;
     }
 
     /**
@@ -121,7 +126,12 @@ class ResumeController extends Controller
 
         $resume->update($data);
 
-        return redirect()->route('resumes.index');
+        return redirect()
+                    ->route('resumes.index')
+                    ->with('alert', [
+                        'type' => 'success',
+                        'message' => "Resume $resume->title updated succesfully"
+                    ]);
     }
 
     /**
@@ -132,6 +142,13 @@ class ResumeController extends Controller
      */
     public function destroy(Resume $resume)
     {
-        //
+        $resume->delete();
+
+        return redirect()
+                    ->route('resumes.index')
+                    ->with('alert', [
+                        'type' => 'danger',
+                        'message' => "Resume $resume->title wad deleted"
+                    ]);
     }
 }

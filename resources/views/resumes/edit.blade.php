@@ -143,9 +143,8 @@
                                         <textarea
                                             class="form-control @error('abaut') is-invalid @enderror"
                                             name="abaut"
-                                            value="{{ old('abaut') ?? $resume->abaut }}"
                                             autocomplete="abaut"
-                                            autofocus></textarea>
+                                            autofocus>{{ old('abaut') ?? $resume->abaut }}</textarea>
 
                                         @error('abaut')
                                         <span class="invalid-feedback" role="alert">
