@@ -53,13 +53,9 @@ class ResumePolicy
      */
     public function update(User $user, Resume $resume)
     {
-        if (isset($resume->user()->id))
-        {
-            return $user->id === $resume->user()->id;
-        }
-        else{
-            return false;
-        }
+
+        return $user->id === $resume->user_id;
+
     }
 
     /**
@@ -71,7 +67,7 @@ class ResumePolicy
      */
     public function delete(User $user, Resume $resume)
     {
-        return $user->id === $resume->user()->id;
+        return $user->id === $resume->user_id;
     }
 
     /**
@@ -83,7 +79,7 @@ class ResumePolicy
      */
     public function restore(User $user, Resume $resume)
     {
-        return $user->id === $resume->user()->id;
+        return $user->id === $resume->user_id;
     }
 
     /**
@@ -95,6 +91,6 @@ class ResumePolicy
      */
     public function forceDelete(User $user, Resume $resume)
     {
-        return $user->id === $resume->user()->id;
+        return $user->id === $resume->user_id;
     }
 }

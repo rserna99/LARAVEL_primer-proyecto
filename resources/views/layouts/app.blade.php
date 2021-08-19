@@ -34,7 +34,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li>
-                            <a href="{{ route('resumes.create') }}">New resume</a>
+                            <a href="{{ route('resumes.index') }}">Resumes</a>
                         </li>
                     </ul>
 

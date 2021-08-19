@@ -94,7 +94,8 @@ class ResumeController extends Controller
      */
     public function edit(Resume $resume)
     {
-        //$this->authorize('update', $resume);
+        $this->authorize('update', $resume);
+        
         return view('resumes.edit', compact('resume'));
     }
 
