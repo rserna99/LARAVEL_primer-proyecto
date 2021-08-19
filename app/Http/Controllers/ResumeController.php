@@ -83,7 +83,7 @@ class ResumeController extends Controller
      */
     public function show(Resume $resume)
     {
-        //
+        return view('resumes.show', compact('resume'));
     }
 
     /**
@@ -94,6 +94,7 @@ class ResumeController extends Controller
      */
     public function edit(Resume $resume)
     {
+        //$this->authorize('update', $resume);
         return view('resumes.edit', compact('resume'));
     }
 
@@ -121,7 +122,7 @@ class ResumeController extends Controller
         {
             $picture = $data['picture']->store('pictures', 'public');
             Image::make(public_path("storage/$picture"))->fit(800, 800)->save();
-            $data['picture'] = $picture;
+            $data['picture'] = "/storage/$picture";
         }
 
         $resume->update($data);
@@ -142,6 +143,8 @@ class ResumeController extends Controller
      */
     public function destroy(Resume $resume)
     {
+        $this->authorize('update', $resume);
+
         $resume->delete();
 
         return redirect()
