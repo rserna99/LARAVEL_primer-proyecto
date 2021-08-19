@@ -17,7 +17,15 @@
             </label>
 
         <div class="col-md-6">
-          <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+          <input
+            id="title"
+            type="title"
+            class="form-control @error('title') is-invalid @enderror"
+            name="title"
+            value="{{ old('title') }}"
+            required
+            autocomplete="title"
+            autofocus>
 
           @error('title')
           <span class="invalid-feedback" role="alert">

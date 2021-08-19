@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resume;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ResumeController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,9 @@ class ResumeController extends Controller
      */
     public function index()
     {
-        //
+        $resumes = auth()->user()->resumes;
+
+        return view('resumes.index', ['resumes' => $resumes]);
     }
 
     /**
@@ -36,7 +47,26 @@ class ResumeController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $user = auth()->user();
+
+        $resume = $user->resumes()->where('title', $request->title)->first();
+
+        if($resume)
+        {
+            return back()
+                ->withErrors(['title' => 'You allready have a resume with this title'])
+                ->withInput(['title' => $request->title]);
+        }
+        else
+        {
+            $resume = $user->resumes()->create([
+                'title' => $request['title'],
+                'name' => $user->name,
+                'email' => $user->email
+            ]);
+        }
+
+        return redirect()->route('resumes.index');
     }
 
     /**
@@ -58,7 +88,7 @@ class ResumeController extends Controller
      */
     public function edit(Resume $resume)
     {
-        //
+        return view('resumes.edit', compact('resume'));
     }
 
     /**
@@ -70,7 +100,21 @@ class ResumeController extends Controller
      */
     public function update(Request $request, Resume $resume)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'website' => 'nullable|url',
+            'picture' => 'nullable|image',
+            'abaut' => 'nullable|string',
+            'title' => Rule::unique('resumes')
+            ->where(fn($query) => $query->where('user_id', $resume->user->id))
+            ->ignore($resume->id)
+        ]);
+
+        if(array_key_exists('picture', $data))
+        {
+            $picture = $data['picture']->store('pictures', 'public');
+        }
     }
 
     /**
