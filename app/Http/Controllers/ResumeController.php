@@ -6,6 +6,7 @@ use App\Models\Resume;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Facades\Image;
 
 class ResumeController extends Controller
 {
@@ -114,7 +115,13 @@ class ResumeController extends Controller
         if(array_key_exists('picture', $data))
         {
             $picture = $data['picture']->store('pictures', 'public');
+            Image::make(public_path("storage/$picture"))->fit(800, 800)->save();
+            $data['picture'] = $picture;
         }
+
+        $resume->update($data);
+
+        return redirect()->route('resumes.index');
     }
 
     /**
