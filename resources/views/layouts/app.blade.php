@@ -35,6 +35,7 @@
                     <ul class="navbar-nav mr-auto">
                         <li>
                             <a href="{{ route('resumes.index') }}">Resumes</a>
+                            <a href="{{ route('resumes.create') }}">New resume</a>
                         </li>
                     </ul>
 

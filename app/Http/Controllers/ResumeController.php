@@ -11,7 +11,6 @@ use Intervention\Image\Facades\Image;
 class ResumeController extends Controller
 {
 
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -67,12 +66,9 @@ class ResumeController extends Controller
             ]);
         }
 
-        return redirect()
-                ->route('resumes.index')
-                ->with('alert', [
-                    'type' => 'success',
-                    'message' => "Resume $resume->title created succesfully"
-                ]);;
+        return $this->alert_redirect(
+            'success',
+            "Resume $resume->title created succesfully");
     }
 
     /**
@@ -95,7 +91,7 @@ class ResumeController extends Controller
     public function edit(Resume $resume)
     {
         $this->authorize('update', $resume);
-        
+
         return view('resumes.edit', compact('resume'));
     }
 
@@ -104,7 +100,7 @@ class ResumeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Resume  $resume
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Resume $resume)
     {
@@ -128,19 +124,16 @@ class ResumeController extends Controller
 
         $resume->update($data);
 
-        return redirect()
-                    ->route('resumes.index')
-                    ->with('alert', [
-                        'type' => 'success',
-                        'message' => "Resume $resume->title updated succesfully"
-                    ]);
+        return $this->alert_redirect(
+            'success',
+            "Resume $resume->title updated succesfully");
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Resume  $resume
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Resume $resume)
     {
@@ -148,11 +141,18 @@ class ResumeController extends Controller
 
         $resume->delete();
 
+        return $this->alert_redirect(
+            'danger',
+            "Resume $resume->title wad deleted");
+    }
+
+    public function alert_redirect($type, $message)
+    {
         return redirect()
-                    ->route('resumes.index')
-                    ->with('alert', [
-                        'type' => 'danger',
-                        'message' => "Resume $resume->title wad deleted"
-                    ]);
+            ->route('resumes.index')
+            ->with('alert', [
+                'type' => $type,
+                'message' => $message
+            ]);
     }
 }
