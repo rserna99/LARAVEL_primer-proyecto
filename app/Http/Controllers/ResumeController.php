@@ -110,10 +110,13 @@ class ResumeController extends Controller
             'website' => 'nullable|url',
             'picture' => 'nullable|image',
             'abaut' => 'nullable|string',
+            'skills' => 'nullable|array',
             'title' => Rule::unique('resumes')
             ->where(fn($query) => $query->where('user_id', $resume->user->id))
             ->ignore($resume->id)
         ]);
+
+        //dd($data);
 
         if(array_key_exists('picture', $data))
         {
